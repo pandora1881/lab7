@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define SIZE 12  // Розмір масиву (два нулі)
+#define SIZE 12  // Розмір масиву
 
 void initializeArray(int array[], int size);
 void printArray(int array[], int size);
@@ -21,23 +21,26 @@ int main() {
     printf("\nКількість елементів масиву, менших за число 7: %d\n", count);
 
     int product = getProductBetweenZeros(array, SIZE);
-    printf("Добуток елементів масиву, розташованих між першим й другим нульовими елементами: %d\n", product);
+    if (product == -1) {
+        printf("Неможливо визначити добуток, оскільки у масиві зустрічається лише один нульовий елемент.\n");
+    } else {
+        printf("Добуток елементів масиву, розташованих між першим й другим нульовими елементами: %d\n", product);
+    }
 
     return 0;
 }
 
 void initializeArray(int array[], int size) {
     int zeroCount = 0;
+    int zeroIndex = rand() % size;  // Генеруємо індекс для першого нуля
+
     for (int i = 0; i < size; i++) {
-        if (zeroCount < 2) {
-            if (rand() % 4 == 0) {
-                array[i] = 0;
-                zeroCount++;
-            } else {
-                array[i] = rand() % 201 - 100;  // Генеруємо випадкове число в діапазоні [-100, 100]
-            }
+        if (i == zeroIndex) {
+            array[i] = 0;
+            zeroCount++;
+            zeroIndex = rand() % size;  // Генеруємо новий індекс для наступного нуля
         } else {
-            array[i] = rand() % 201 - 100;
+            array[i] = rand() % 201 - 100;  // Генеруємо випадкове число в діапазоні [-100, 100]
         }
     }
 }
@@ -80,7 +83,7 @@ int getProductBetweenZeros(int array[], int size) {
             product *= array[i];
         }
     } else {
-        product = 0;
+        product = -1;
     }
 
     return product;
