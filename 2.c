@@ -1,89 +1,65 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
-void initializeArray(int array[], int size)
-{
-    srand(time(NULL));
-    for (int i = 0; i < size; i++)
-    {
-        array[i] = rand() % 201 - 100; // генеруємо випадкове число з діапазону [-100, 100]
+int підрахуватиКількістьЕлементівМеншихЗа(int arr[], int size, int num) {
+    int кількість = 0;
+    for (int i = 0; i < size; i++) {
+        if (arr[i] < num) {
+            кількість++;
+        }
+    }
+    return кількість;
+}
+
+int добутокМіжНулями(int arr[], int size) {
+    int добуток = 1;
+    int першийІндексНуля = -1;
+    
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == 0) {
+            if (першийІндексНуля == -1) {
+                першийІндексНуля = i;
+            } else {
+                // Знайдено другий нуль, виходимо з циклу
+                break;
+            }
+        } else if (першийІндексНуля != -1) {
+            добуток *= arr[i];
+        }
+    }
+    
+    return добуток;
+}
+
+void ініціалізуватиМасив(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        arr[i] = rand() % 201 - 100; // Генеруємо випадкове число з діапазону [-100;100]
     }
 }
 
-void printArray(int array[], int size)
-{
-    for (int i = 0; i < size; i++)
-    {
-        printf("%d ", array[i]);
+void вивестиМасив(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
     }
     printf("\n");
 }
 
-int countElementsLessThanSeven(int array[], int size)
-{
-    int count = 0;
-    for (int i = 0; i < size; i++)
-    {
-        if (array[i] < 7)
-        {
-            count++;
-        }
-    }
-    return count;
-}
-
-int getProductBetweenZeros(int array[], int size)
-{
-    int product = 1;
-    int firstZeroIndex = -1;
-    int secondZeroIndex = -1;
-
-    for (int i = 0; i < size; i++)
-    {
-        if (array[i] == 0)
-        {
-            if (firstZeroIndex == -1)
-            {
-                firstZeroIndex = i;
-            }
-            else
-            {
-                secondZeroIndex = i;
-                break;
-            }
-        }
-    }
-
-    if (firstZeroIndex != -1 && secondZeroIndex != -1 && secondZeroIndex > firstZeroIndex + 1)
-    {
-        for (int i = firstZeroIndex + 1; i < secondZeroIndex; i++)
-        {
-            product *= array[i];
-        }
-    }
-    else
-    {
-        product = 0; // якщо немає двох нульових елементів або вони знаходяться поруч, добуток буде 0
-    }
-
-    return product;
-}
-
-int main()
-{
-    const int SIZE = 10; // розмір масиву
-    int array[SIZE];
-
-    initializeArray(array, SIZE);
+int main() {
+    const int РОЗМІР = 10; // Розмір масиву
+    int arr[РОЗМІР];
+    
+    // Ініціалізація та виведення масиву
+    ініціалізуватиМасив(arr, РОЗМІР);
     printf("Масив: ");
-    printArray(array, SIZE);
-
-    int count = countElementsLessThanSeven(array, SIZE);
-    printf("Кількість елементів масиву, менших за число 7: %d\n", count);
-
-    int product = getProductBetweenZeros(array, SIZE);
-    printf("Добуток елементів масиву, розташованих між першим й другим нульовими елементами: %d\n", product);
-
+    вивестиМасив(arr, РОЗМІР);
+    
+    // Кількість елементів, менших за число сім
+    int кількістьМеншихСім = підрахуватиКількістьЕлементівМеншихЗа(arr, РОЗМІР, 7);
+    printf("Кількість елементів, менших за число 7: %d\n", кількістьМеншихСім);
+    
+    // Добуток елементів масиву, розташованих між першим і другим нульовими елементами
+    int добутокМіжНулямиРезультат = добутокМіжНулями(arr, РОЗМІР);
+    printf("Добуток елементів між першим і другим нульовими елементами: %d\n", добутокМіжНулямиРезультат);
+    
     return 0;
 }
